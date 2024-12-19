@@ -1,10 +1,8 @@
 package com.example.firstapplication;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-
+import static android.content.ContentValues.TAG;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,11 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RegisterActivity extends AppCompatActivity {
     private EditText etRegEmail, etRegPassword;
     private Button btnRegister;
-    private UserRepository userRepo;
-//    public DatabaseHelper dbHelper;
-//    public SQLiteDatabase db;
-
-    public Context context;
+    public DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,37 +23,33 @@ public class RegisterActivity extends AppCompatActivity {
         etRegPassword = findViewById(R.id.etRegPassword);
         btnRegister = findViewById(R.id.btnRegister);
 
-        userRepo = new UserRepository(context);
+        Log.d(TAG, "onCreate: RegisterActivity initialized"); // Debug Log
+
+        dbHelper = new DatabaseHelper(this);
+        Log.d(TAG, dbHelper.toString()); // Debug Log
 
         btnRegister.setOnClickListener(v -> {
             String email = etRegEmail.getText().toString();
             String password = etRegPassword.getText().toString();
 
-            long result = userRepo.registerUser(email, password);
+            Log.d(TAG, email); // Debug Log
+            Log.d(TAG, password); // Debug Log
+            Log.d(TAG, "Btn clicked"); // Debug Log
 
-            if (result > 0) {
-                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                handleRegisterSuccess();
-                // Redirect to LoginActivity
-//                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-//                startActivity(intent);
-//                finish();
+            // long result = dbHelper.registerUser(email, password);
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(RegisterActivity.this, "Email and Password cannot be empty", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                long result = dbHelper.registerUser(email, password);
+
+                if (result > 0) {
+                    Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                    //handleRegisterSuccess();
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-    }
-
-    //When a user successfully registers, you can optionally log them in directly after registration
-    private void handleRegisterSuccess() {
-        SharedPreferences preferences = getSharedPreferences("user_pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isLoggedIn", true);
-        editor.apply();
-
-        // Redirect to MainActivity
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 }
