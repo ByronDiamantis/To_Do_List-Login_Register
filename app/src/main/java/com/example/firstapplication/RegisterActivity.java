@@ -8,11 +8,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.firstapplication.sampledata.UserRepository;
+
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText etRegEmail, etRegPassword;
     private Button btnRegister;
-    public DatabaseHelper dbHelper;
+    private UserRepository userRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +27,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: RegisterActivity initialized"); // Debug Log
 
-        dbHelper = new DatabaseHelper(this);
-        Log.d(TAG, dbHelper.toString()); // Debug Log
+        userRepo = new UserRepository(this);
+        Log.d(TAG, userRepo.toString()); // Debug Log
 
         btnRegister.setOnClickListener(v -> {
             String email = etRegEmail.getText().toString();
@@ -41,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(RegisterActivity.this, "Email and Password cannot be empty", Toast.LENGTH_SHORT).show();
             } else {
-                long result = dbHelper.registerUser(email, password);
+                long result = userRepo.registerUser(email, password);
 
                 if (result > 0) {
                     Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
