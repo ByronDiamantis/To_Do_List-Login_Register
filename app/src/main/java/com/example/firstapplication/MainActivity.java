@@ -14,27 +14,34 @@ import android.widget.Button;
 import com.example.firstapplication.sampledata.TaskRepository;
 
 
+
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
     private ArrayList<String> taskList;
     private TaskRepository taskRepo;
+    private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = new DatabaseHelper(this).getWritableDatabase();
-        taskRepo = new TaskRepository(db);
+
+        dbHelper = new DatabaseHelper(this);
+        db = dbHelper.getWritableDatabase();
+        taskRepo = new TaskRepository(db, this);
 
         taskList = new ArrayList<>();
 
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         taskList = taskRepo.getAllTasks(); // Load tasks from the database
         Log.d(TAG, "Task list" + taskList);
@@ -44,9 +51,16 @@ public class MainActivity extends AppCompatActivity {
         taskAdapter = new TaskAdapter(taskList, taskRepo);
         recyclerView.setAdapter(taskAdapter);
 
+
+        Log.d(TAG, "Set up the RecyclerView adapter: Success");
+
+
         // Reference to the Logout Button
         Button logoutButton = findViewById(R.id.btnLogout);
         logoutButton.setOnClickListener(v -> logoutUser());
+
+        Log.d(TAG, "Reference to the Logout Button");
+
 
         // Handle adding a new task
         findViewById(R.id.addTaskButton).setOnClickListener(v -> {

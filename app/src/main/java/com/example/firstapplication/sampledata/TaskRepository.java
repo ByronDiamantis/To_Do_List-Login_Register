@@ -1,6 +1,7 @@
 package com.example.firstapplication.sampledata;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.example.firstapplication.DatabaseHelper;
@@ -8,20 +9,15 @@ import com.example.firstapplication.DatabaseHelper;
 import java.util.ArrayList;
 
 //Handle Task-Related Queries
-public class TaskRepository {
+public class TaskRepository extends DatabaseHelper{
 
     private final SQLiteDatabase db;
 
-    public TaskRepository(SQLiteDatabase db) {
+    public TaskRepository(SQLiteDatabase db, Context context) {
+        super(context);
         this.db = db;
     }
 
-    public boolean insertTask(String task) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_TASK, task);
-        long result = db.insert(DatabaseHelper.TABLE_TASKS, null, values);
-        return result != -1;
-    }
 
     public ArrayList<String> getAllTasks() {
         ArrayList<String> tasks = new ArrayList<>();

@@ -15,9 +15,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     private final ArrayList<String> tasks;
 
     private TaskRepository taskRepo;
-    private SQLiteDatabase db;
 
-    public TaskAdapter(ArrayList<String> tasks, TaskAdapter taskAdapter) {
+    public TaskAdapter(ArrayList<String> tasks, TaskRepository taskRepo) {
         this.tasks = tasks;
         this.taskRepo = taskRepo;
     }
@@ -34,8 +33,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     //Binds data from the tasks list to the views in the TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        db = new DatabaseHelper(this).getWritableDatabase();
-        taskRepo = new TaskRepository(db);
         String task = tasks.get(position);
         holder.taskTextView.setText(task);
 
