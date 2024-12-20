@@ -1,8 +1,9 @@
-package com.example.firstapplication;
+package com.example.firstapplication.sampledata;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.example.firstapplication.DatabaseHelper;
 
 import java.util.ArrayList;
 

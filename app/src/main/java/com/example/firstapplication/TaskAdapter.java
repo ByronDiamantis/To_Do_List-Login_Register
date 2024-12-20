@@ -1,5 +1,6 @@
 package com.example.firstapplication;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,15 +9,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-
+import com.example.firstapplication.sampledata.TaskRepository;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     private final ArrayList<String> tasks;
-    private final DatabaseHelper dbHelper;
 
-    public TaskAdapter(ArrayList<String> tasks, DatabaseHelper dbHelper) {
+    private TaskRepository taskRepo;
+    private SQLiteDatabase db;
+
+    public TaskAdapter(ArrayList<String> tasks, TaskAdapter taskAdapter) {
         this.tasks = tasks;
-        this.dbHelper = dbHelper;
+        this.taskRepo = taskRepo;
     }
 
     //Creates a new TaskViewHolder instance to represent a single list item.
@@ -31,12 +34,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     //Binds data from the tasks list to the views in the TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
+        db = new DatabaseHelper(this).getWritableDatabase();
+        taskRepo = new TaskRepository(db);
         String task = tasks.get(position);
         holder.taskTextView.setText(task);
 
         // Set delete button functionality
         holder.deleteButton.setOnClickListener(v -> {
-            dbHelper.deleteTask(task); // Delete from database
+            taskRepo.deleteTask(task); // Delete from database
             tasks.remove(position); // Remove from list
             notifyItemRemoved(position); // Notify adapter
         });

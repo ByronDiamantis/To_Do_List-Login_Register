@@ -12,33 +12,25 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import static android.content.ContentValues.TAG;
 
+import com.example.firstapplication.sampledata.UserRepository;
+
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvRegister;
-    public DatabaseHelper dbHelper;
+    private UserRepository userRepo;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Check if the user is already logged in
-//        SharedPreferences preferences = getSharedPreferences("user_pref", MODE_PRIVATE);
-//        boolean isLoggedIn = preferences.getBoolean("isLoggedIn", false);
-//
-//        if (isLoggedIn) {
-//            // If logged in, go to MainActivity directly
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//            return; // Exit onCreate() early
-//        }
 
         setContentView(R.layout.activity_login);
-        dbHelper = new DatabaseHelper(this);
+        userRepo = new UserRepository(this);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -51,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();
 
-            if (dbHelper != null && dbHelper.validateUser(email, password)) {
+            if (userRepo != null && userRepo.validateUser(email, password)) {
                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
                 // Redirect to MainActivity
