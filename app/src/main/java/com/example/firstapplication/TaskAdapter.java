@@ -1,6 +1,5 @@
 package com.example.firstapplication;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import com.example.firstapplication.sampledata.TaskRepository;
+import com.example.firstapplication.Repositories.TaskRepository;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     private final ArrayList<String> tasks;

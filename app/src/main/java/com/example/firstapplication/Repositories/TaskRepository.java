@@ -1,6 +1,5 @@
-package com.example.firstapplication.sampledata;
+package com.example.firstapplication.Repositories;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
