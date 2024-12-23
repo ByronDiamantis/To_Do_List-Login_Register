@@ -1,4 +1,4 @@
-package com.example.firstapplication;
+package com.example.firstapplication.Activities;
 
 
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.firstapplication.Models.User;
+import com.example.firstapplication.R;
 import com.example.firstapplication.Services.AuthService;
 
 

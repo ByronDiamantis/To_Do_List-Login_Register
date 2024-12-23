@@ -3,7 +3,7 @@ package com.example.firstapplication.Repositories;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.example.firstapplication.DatabaseHelper;
+import com.example.firstapplication.Database.DatabaseHelper;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,6 @@ public class TaskRepository extends DatabaseHelper{
         super(context);
         this.db = db;
     }
-
 
     public ArrayList<String> getAllTasks() {
         ArrayList<String> tasks = new ArrayList<>();

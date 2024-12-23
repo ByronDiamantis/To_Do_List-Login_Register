@@ -1,4 +1,4 @@
-package com.example.firstapplication;
+package com.example.firstapplication.Activities;
 
 import android.app.Activity;
 import android.content.Intent;

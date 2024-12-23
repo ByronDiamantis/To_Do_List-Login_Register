@@ -1,4 +1,4 @@
-package com.example.firstapplication;
+package com.example.firstapplication.Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+
+import com.example.firstapplication.R;
 import com.example.firstapplication.Repositories.TaskRepository;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 

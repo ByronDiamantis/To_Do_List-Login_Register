@@ -1,11 +1,11 @@
-package com.example.firstapplication;
+package com.example.firstapplication.Activities;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
 
-import com.example.firstapplication.Repositories.UserRepository;
+import com.example.firstapplication.R;
 import com.example.firstapplication.Services.AuthService;
 
 
@@ -33,7 +33,7 @@ public class RegisterActivity extends BaseActivity {
 
             } else {
 
-                if (authService.register(email, password)) {
+                if (authService.register(email, password) != null) {
                     this.message(RegisterActivity.this, "Registration Successful");
                 } else {
                     this.message(RegisterActivity.this, "Registration Failed");

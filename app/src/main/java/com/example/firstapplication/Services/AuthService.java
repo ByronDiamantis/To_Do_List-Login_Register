@@ -15,13 +15,13 @@ public class AuthService {
     }
     public User login(String email, String password)
     {
+        return userRepo.loginUser(email, password);
+    }
+    public User register(String email, String password)
+    {
         // Validate if email is actually an email.
         // Validate if password is greater that 6 characters.
 
-        return userRepo.loginUser(email, password);
-    }
-    public long register(String email, String password)
-    {
         return userRepo.registerUser(email, password);
     }
 }

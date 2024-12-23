@@ -5,9 +5,6 @@ public class User {
     private String email;
     private String password;
 
-    // Default Constructor
-    public User() {}
-
     // Parameterized Constructor
     public User(int id, String email, String password) {
         this.id = id;
@@ -16,6 +13,7 @@ public class User {
     }
 
     // Getters and Setters
+
     public int getId() {
         return id;
     }

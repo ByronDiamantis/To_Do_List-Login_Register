@@ -1,4 +1,4 @@
-package com.example.firstapplication;
+package com.example.firstapplication.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -64,7 +64,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_USER_EMAIL + " TEXT UNIQUE NOT NULL, " +
                     COLUMN_USER_PASSWORD + " TEXT NOT NULL);";
-
 
     // Existing tasks table creation
     private static final String CREATE_TABLE_TASKS =
