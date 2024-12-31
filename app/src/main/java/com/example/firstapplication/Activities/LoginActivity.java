@@ -1,14 +1,11 @@
 package com.example.firstapplication.Activities;
 
-
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.example.firstapplication.R;
 import com.example.firstapplication.Services.AuthService;
-
 
 public class LoginActivity extends BaseActivity {
 
@@ -38,8 +35,10 @@ public class LoginActivity extends BaseActivity {
                 startActivity(this.redirect(LoginActivity.this, MainActivity.class));
                 finish();
             }
+            else{
+                this.message(LoginActivity.this, "Invalid Credentials");
+            }
 
-            this.message(LoginActivity.this, "Invalid Credentials");
         });
 
         tvRegister.setOnClickListener(v -> {

@@ -1,6 +1,5 @@
 package com.example.firstapplication.Activities;
 
-import static android.content.ContentValues.TAG;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,28 +10,29 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 import com.example.firstapplication.Database.DatabaseHelper;
+import com.example.firstapplication.Models.Task;
 import com.example.firstapplication.R;
-import com.example.firstapplication.Repositories.TaskRepository;
 import com.example.firstapplication.Adapters.TaskAdapter;
+import com.example.firstapplication.Services.TaskService;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private TaskService taskService;
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
-    private ArrayList<String> taskList;
-    private TaskRepository taskRepo;
-    private DatabaseHelper dbHelper;
-    private SQLiteDatabase db;
+    private ArrayList<Task> taskList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new DatabaseHelper(this);
-        db = dbHelper.getWritableDatabase();
-        taskRepo = new TaskRepository(db, this);
+        // Initialize the database and TaskService
+        SQLiteDatabase db = new DatabaseHelper(this).getWritableDatabase();
+        taskService = new TaskService(db, this);
 
         taskList = new ArrayList<>();
 
@@ -40,11 +40,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        taskList = taskRepo.getAllTasks(); // Load tasks from the database
-        Log.d(TAG, "Task list" + taskList);
+        taskList = taskService.tasks(); // Fetch tasks from the service
 
         // Set up the RecyclerView adapter
-        taskAdapter = new TaskAdapter(taskList, taskRepo);
+        taskAdapter = new TaskAdapter(taskList, taskService);
         recyclerView.setAdapter(taskAdapter);
 
         // Reference to the Logout Button
@@ -58,16 +57,37 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-     // Debug Log
+    // Handles the process of receiving a task from AddTaskActivity and updating the task list in MainActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            String newTask = data.getStringExtra("task");
-            taskList.add(newTask); // Add task to list
-            taskAdapter.notifyDataSetChanged(); // Notify the adapter
+
+        Log.d("MainActivity", "onActivityResult called with requestCode: " + requestCode + ", resultCode: " + resultCode);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            Log.d("MainActivity", "Intent data: " + data); // Debugging log
+            String taskName = data.getStringExtra("task"); // Get task from intent
+            Log.d("MainActivity", "Task name received: " + taskName);
+
+            if (taskName != null) {
+                taskName = taskName.trim(); // Remove leading/trailing spaces
+            }
+
+            if (taskName != null && !taskName.isEmpty()) {
+                Log.d("MainActivity", "Adding task: " + taskName);
+                Task newTask = new Task(taskName); // Create Task object
+                taskList.add(newTask); // Add to list
+                Log.d("MainActivity", "Task added successfully: " + newTask.getTask());
+                taskAdapter.notifyDataSetChanged(); // Refresh RecyclerView
+            } else {
+                Log.d("MainActivity", "Invalid or empty task name");
+                Toast.makeText(this, "Task is empty!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Log.d("MainActivity", "No data received or result not OK");
         }
     }
+
 
     private void logoutUser() {
         // Reset login status

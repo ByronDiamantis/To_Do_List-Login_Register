@@ -8,21 +8,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-
+import com.example.firstapplication.Models.Task;
 import com.example.firstapplication.R;
-import com.example.firstapplication.Repositories.TaskRepository;
+import com.example.firstapplication.Services.TaskService;
+
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
-    private final ArrayList<String> tasks;
+    private final ArrayList<Task> tasks;
+    private TaskService taskService;
 
-    private TaskRepository taskRepo;
-
-    public TaskAdapter(ArrayList<String> tasks, TaskRepository taskRepo) {
+    public TaskAdapter(ArrayList<Task> tasks, TaskService taskService) {
         this.tasks = tasks;
-        this.taskRepo = taskRepo;
+        this.taskService = taskService;
+
     }
 
-    //Creates a new TaskViewHolder instance to represent a single list item.
+    // Creates a new TaskViewHolder instance to represent a single list item.
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,21 +32,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return new TaskViewHolder(view);
     }
 
-    //Binds data from the tasks list to the views in the TaskViewHolder
+    // Binds data from the tasks list to the views in the TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        String task = tasks.get(position);
-        holder.taskTextView.setText(task);
+        Task task = tasks.get(position);
+        holder.taskTextView.setText(task.getTask()); // Assuming getTask() returns the task's name
 
         // Set delete button functionality
         holder.deleteButton.setOnClickListener(v -> {
-            taskRepo.deleteTask(task); // Delete from database
+            taskService.deleteTask(String.valueOf(task)); // Delete from database
             tasks.remove(position); // Remove from list
             notifyItemRemoved(position); // Notify adapter
         });
     }
 
-    //Returns the total number of items in the tasks list. This tells the RecyclerView how many items to display.
+    // Returns the total number of items in the tasks list. This tells the RecyclerView how many items to display.
     @Override
     public int getItemCount() {
         return tasks.size();

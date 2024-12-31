@@ -28,19 +28,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // Static method to get the single instance of the helper
-    public static synchronized DatabaseHelper getInstance(Context context) {
-        if (instance == null) {
-            instance = new DatabaseHelper(context.getApplicationContext());
-        }
-        return instance;
-    }
-
-    // Example of getting a writable database
-    public static SQLiteDatabase getWritableDatabase(Context context) {
-        return getInstance(context).getWritableDatabase();
-    }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USERS);
@@ -52,10 +39,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             db.execSQL(CREATE_TABLE_USERS);
             db.execSQL(CREATE_TABLE_TASKS);
+            onCreate(db);
         }
-
-        // Recreate tables
-        onCreate(db);
     }
 
     // SQL to create the users table table of database.
