@@ -1,7 +1,7 @@
 package com.example.firstapplication.Activities;
 
+
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,50 +11,59 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
-import com.example.firstapplication.Database.DatabaseHelper;
 import com.example.firstapplication.Models.Task;
 import com.example.firstapplication.R;
 import com.example.firstapplication.Adapters.TaskAdapter;
 import com.example.firstapplication.Services.TaskService;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    private TaskService taskService;
+    private final TaskService taskService = new TaskService(this);
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
     private ArrayList<Task> taskList;
+    private int userId; // User ID of the logged-in user
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize the database and TaskService
-        SQLiteDatabase db = new DatabaseHelper(this).getWritableDatabase();
-        taskService = new TaskService(db, this);
+        // Get the userId from SharedPreferences
+        SharedPreferences preferences = getSharedPreferences("user_pref", MODE_PRIVATE);
+        // User ID of the logged-in user
+        userId = preferences.getInt("userId", -1); // Default to -1 if not found
 
-        taskList = new ArrayList<>();
+        if (userId != -1) {
+            // Fetch tasks for the current user
+            taskList = taskService.getTasksOfCurrentUser(userId); // Initialize task list and fetch tasks for the logged-in user
+        } else {
+            // Handle the case where no userId is found (e.g., user is not logged in)
+            this.message(MainActivity.this, "Error: No user logged in.");
+        }
 
-        // Initialize RecyclerView
+
+
+        // Set up RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        taskList = taskService.tasks(); // Fetch tasks from the service
-
-        // Set up the RecyclerView adapter
-        taskAdapter = new TaskAdapter(taskList, taskService);
+        taskAdapter = new TaskAdapter(taskList, taskService, userId);
         recyclerView.setAdapter(taskAdapter);
+
+
+        // Set up Add Task button
+        findViewById(R.id.addTaskButton).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+            startActivityForResult(intent, 1); // Start AddTaskActivity for result
+        });
 
         // Reference to the Logout Button
         Button logoutButton = findViewById(R.id.btnLogout);
         logoutButton.setOnClickListener(v -> logoutUser());
 
-        // Handle adding a new task
-        findViewById(R.id.addTaskButton).setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
-            startActivityForResult(intent, 1);
-        });
     }
 
     // Handles the process of receiving a task from AddTaskActivity and updating the task list in MainActivity
@@ -62,31 +71,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d("MainActivity", "onActivityResult called with requestCode: " + requestCode + ", resultCode: " + resultCode);
-
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            Log.d("MainActivity", "Intent data: " + data); // Debugging log
-            String taskName = data.getStringExtra("task"); // Get task from intent
-            Log.d("MainActivity", "Task name received: " + taskName);
+            String taskName = data.getStringExtra("task"); // Get task name from intent
 
             if (taskName != null) {
                 taskName = taskName.trim(); // Remove leading/trailing spaces
             }
 
             if (taskName != null && !taskName.isEmpty()) {
-                Log.d("MainActivity", "Adding task: " + taskName);
-                Task newTask = new Task(taskName); // Create Task object
-                taskList.add(newTask); // Add to list
-                Log.d("MainActivity", "Task added successfully: " + newTask.getTask());
-                taskAdapter.notifyDataSetChanged(); // Refresh RecyclerView
+                // Generate a new ID for the task (if your app requires unique IDs)
+                // Here, we assume IDs are auto-generated or not needed for local storage
+                int newTaskId = taskList.size() + 1; // Example ID logic
+                int userId = this.userId; // Use the current user's ID
+
+                // Create a new Task object with all required fields
+                Task newTask = new Task(newTaskId, userId, taskName);
+
+                // Add the new Task to the list
+                taskList.add(newTask);
+
+                // Notify the adapter of the changes
+                taskAdapter.notifyDataSetChanged();
             } else {
-                Log.d("MainActivity", "Invalid or empty task name");
                 Toast.makeText(this, "Task is empty!", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Log.d("MainActivity", "No data received or result not OK");
         }
     }
+
 
 
     private void logoutUser() {

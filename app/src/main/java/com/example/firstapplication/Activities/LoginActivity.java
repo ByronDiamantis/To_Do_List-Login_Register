@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.example.firstapplication.R;
 import com.example.firstapplication.Services.AuthService;
 
+
 public class LoginActivity extends BaseActivity {
 
     private final AuthService authService = new AuthService(this);
@@ -29,6 +30,7 @@ public class LoginActivity extends BaseActivity {
 
 
             if(authService.login(email, password) != null) {
+                
                 this.message(LoginActivity.this, "Login Successful");
 
                 // Redirect to MainActivity
