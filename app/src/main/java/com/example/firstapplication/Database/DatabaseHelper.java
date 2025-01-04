@@ -36,13 +36,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            db.execSQL(CREATE_TABLE_USERS);
-            db.execSQL(CREATE_TABLE_TASKS);
-            onCreate(db);
-        }
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        onCreate(db); // Recreate tables with the correct schema
+    }
+
 
     // SQL to create the users table table of database.
     private static final String CREATE_TABLE_USERS =
@@ -53,12 +58,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Existing tasks table creation
+//    private static final String CREATE_TABLE_TASKS =
+//            "CREATE TABLE " + TABLE_TASKS + " (" +
+//                    TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  // Space added here
+//                    COLUMN_TASK + " TEXT NOT NULL, " +
+//                    COLUMN_USER_ID + " INTEGER NOT NULL, " +  // Foreign key column
+//                    "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE);";
+
+
     private static final String CREATE_TABLE_TASKS =
             "CREATE TABLE " + TABLE_TASKS + " (" +
-                    TASK_ID + "INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_TASK + " TEXT NOT NULL, " +
-                    COLUMN_USER_ID + " INTEGER NOT NULL, " + // Foreign key column
-                    "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "));";  // Each task belongs to a valid user in the users table.
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "task TEXT NOT NULL);";
+    // Each task belongs to a valid user in the users table.
 
 
 }
