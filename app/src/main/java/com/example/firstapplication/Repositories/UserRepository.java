@@ -2,14 +2,19 @@ package com.example.firstapplication.Repositories;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import com.example.firstapplication.Database.DatabaseHelper;
 import com.example.firstapplication.Models.User;
 
 public class UserRepository extends DatabaseHelper {
 
+    private final Context context;
+    private static final String PREF_NAME = "user_pref";
+
     public UserRepository(Context context) {
         super(context); // Pass the context to the parent DatabaseHelper constructor
+        this.context = context;
     }
 
     public User registerUser(String email, String password) {
@@ -37,8 +42,7 @@ public class UserRepository extends DatabaseHelper {
 
         // Check if the insertion was successful
         if (rowId != -1) {
-            // Return a new User object with the ID, email, and password
-            return new User((int) rowId, email, password);
+            return new User((int) rowId, email, password); // Return a new User object with the ID, email, and password
         } else {
             return null; // Handle failure (optional: throw an exception or return null)
         }
@@ -69,4 +73,5 @@ public class UserRepository extends DatabaseHelper {
         }
         return null; // Return null if no user is found
     }
+
 }

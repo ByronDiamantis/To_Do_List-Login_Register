@@ -58,19 +58,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Existing tasks table creation
-//    private static final String CREATE_TABLE_TASKS =
-//            "CREATE TABLE " + TABLE_TASKS + " (" +
-//                    TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  // Space added here
-//                    COLUMN_TASK + " TEXT NOT NULL, " +
-//                    COLUMN_USER_ID + " INTEGER NOT NULL, " +  // Foreign key column
-//                    "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE);";
-
-
     private static final String CREATE_TABLE_TASKS =
             "CREATE TABLE " + TABLE_TASKS + " (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "task TEXT NOT NULL);";
-    // Each task belongs to a valid user in the users table.
-
+                    TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  // Space added here
+                    COLUMN_TASK + " TEXT NOT NULL, " +
+                    COLUMN_USER_ID + " INTEGER NOT NULL, " +  // Foreign key column
+                    "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE);";
 
 }

@@ -16,7 +16,7 @@ import com.example.firstapplication.Services.TaskService;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     private final ArrayList<Task> tasks;
-    private TaskService taskService;
+    private final TaskService taskService;
     public final int userId;
 
 
@@ -43,7 +43,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         // Set delete button functionality
         holder.deleteButton.setOnClickListener(v -> {
-            taskService.deleteTask(String.valueOf(task), task.getUserId()); // Delete from database
+            taskService.deleteTask(String.valueOf(task)); // Delete from database
             tasks.remove(position); // Remove from list
             notifyItemRemoved(position); // Notify adapter
         });

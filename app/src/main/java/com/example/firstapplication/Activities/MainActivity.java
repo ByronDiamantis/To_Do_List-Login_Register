@@ -19,8 +19,6 @@ import com.example.firstapplication.Services.TaskService;
 
 public class MainActivity extends BaseActivity {
 
-    private final TaskService taskService = new TaskService(this);
-    private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
     private ArrayList<Task> taskList;
     private int userId; // User ID of the logged-in user
@@ -32,6 +30,9 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //  private final TaskService taskService = new TaskService(this);
+        TaskService taskService = new TaskService(this);
         // Get the userId from SharedPreferences
         SharedPreferences preferences = getSharedPreferences("user_pref", MODE_PRIVATE);
         // User ID of the logged-in user
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity {
 
         if (userId != -1) {
             // Fetch tasks for the current user
-            taskList = taskService.getTasksOfCurrentUser(userId); // Initialize task list and fetch tasks for the logged-in user
+            taskList = taskService.getTasksOfCurrentUser(); // Initialize task list and fetch tasks for the logged-in user
         } else {
             // Handle the case where no userId is found (e.g., user is not logged in)
             this.message(MainActivity.this, "Error: No user logged in.");
@@ -48,7 +49,7 @@ public class MainActivity extends BaseActivity {
 
 
         // Set up RecyclerView
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         taskAdapter = new TaskAdapter(taskList, taskService, userId);
         recyclerView.setAdapter(taskAdapter);
