@@ -3,6 +3,8 @@ package com.example.firstapplication.Activities;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.firstapplication.Models.User;
 import com.example.firstapplication.R;
 import com.example.firstapplication.Services.AuthService;
 import java.util.regex.Matcher;
@@ -10,61 +12,59 @@ import java.util.regex.Pattern;
 
 
 public class RegisterActivity extends BaseActivity {
+
+    private AuthService authService;
     private EditText etRegEmail, etRegPassword;
-    private Button btnRegister;
-    private final AuthService authService = new AuthService(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        authService = new AuthService(this);
+
+        // Initialize views
         etRegEmail = findViewById(R.id.etRegEmail);
         etRegPassword = findViewById(R.id.etRegPassword);
-        btnRegister = findViewById(R.id.btnRegister);
+        Button btnRegister = findViewById(R.id.btnRegister);
 
-        btnRegister.setOnClickListener(v -> {
-            String email = etRegEmail.getText().toString().trim();
-            String password = etRegPassword.getText().toString().trim();
+        // Set event listener
+        btnRegister.setOnClickListener(v -> handleRegistration());
+    }
 
-            if (email.isEmpty() || password.isEmpty()) {
-                this.message(RegisterActivity.this, "Email and Password cannot be empty");
-                return;
-            }
+    private void handleRegistration() {
+        String email = etRegEmail.getText().toString().trim();
+        String password = etRegPassword.getText().toString().trim();
 
-            // Regex for email validation
-            String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-            Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(email);
+        if (email.isEmpty() || password.isEmpty()) {
+            this.message(this, "Email and Password cannot be empty");
+            return;
+        }
 
-            if (!matcher.matches()) {
-                this.message(RegisterActivity.this, "Invalid email format");
-                return;
-            }
+        if (!isValidEmail(email)) {
+            this.message(this, "Invalid email format");
+            return;
+        }
 
-            if (password.length() < 6) {
-                this.message(RegisterActivity.this, "Password must be at least 6 characters long");
-                return;
-            }
+        if (password.length() < 6) {
+            this.message(this, "Password must be at least 6 characters long");
+            return;
+        }
 
-            try {
-                // Attempt registration
-                if (authService.register(email, password) != null) {
-                    this.message(RegisterActivity.this, "Registration Successful");
+        User user = authService.register(email, password);
 
-                    // Redirect to LoginActivity
-                    startActivity(this.redirect(RegisterActivity.this, LoginActivity.class));
-                    finish();
-                } else {
-                    this.message(RegisterActivity.this, "Registration Failed. Please try again.");
-                }
-            } catch (IllegalArgumentException e) {
-                // Show validation error messages
-                this.message(RegisterActivity.this, e.getMessage());
-            } catch (Exception e) {
-                // Handle unexpected errors
-                this.message(RegisterActivity.this, "An error occurred. Please try again.");
-            }
-        });
+        if (user != null) {
+            this.message(this, "Registration Successful");
+            startActivity(this.redirect(this, LoginActivity.class));
+            finish();
+        } else {
+            this.message(this, "Registration Failed. Email may already be in use.");
+        }
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+        return pattern.matcher(email).matches();
     }
 }
