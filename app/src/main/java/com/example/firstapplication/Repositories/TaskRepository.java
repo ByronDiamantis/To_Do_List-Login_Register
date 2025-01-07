@@ -25,11 +25,12 @@ public class TaskRepository {
 
         Cursor cursor = db.query(
                 DatabaseHelper.TABLE_TASKS,
-                new String[]{DatabaseHelper.COLUMN_TASK},
+                new String[]{DatabaseHelper.TASK_ID, DatabaseHelper.COLUMN_TASK}, // Include TASK_ID here
                 DatabaseHelper.COLUMN_USER_ID + " = ?", // Filter by user_id
                 new String[]{String.valueOf(userId)},
                 null, null, null
         );
+
 
         if (cursor != null) {
             while (cursor.moveToNext()) {

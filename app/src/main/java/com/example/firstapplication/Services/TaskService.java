@@ -24,7 +24,11 @@ public class TaskService {
         if (userId == -1) {
             return new ArrayList<>(); // Return an empty list if no user is logged in
         }
-        return taskRepo.getTasksOfCurrentUser(userId); // Pass userId to fetch tasks for the logged-in user
+        try {
+            return taskRepo.getTasksOfCurrentUser(userId); // Pass userId to fetch tasks for the logged-in user
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     // Add a task for the logged-in user

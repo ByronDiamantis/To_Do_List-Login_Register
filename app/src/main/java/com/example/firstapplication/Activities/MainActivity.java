@@ -1,6 +1,7 @@
 package com.example.firstapplication.Activities;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,6 @@ public class MainActivity extends BaseActivity {
     private TaskAdapter taskAdapter;
     private ArrayList<Task> taskList;
     private int userId; // User ID of the logged-in user
-    private TaskService taskService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        TaskService taskService = new TaskService(this);
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             String taskName = data.getStringExtra("task");
