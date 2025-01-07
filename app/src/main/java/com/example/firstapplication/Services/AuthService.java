@@ -12,8 +12,6 @@ public class AuthService {
     private static final String PREF_NAME = "user_pref";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_USER_ID = "userId";
-
-
     private final UserRepository userRepo;
     private final Context context;
 

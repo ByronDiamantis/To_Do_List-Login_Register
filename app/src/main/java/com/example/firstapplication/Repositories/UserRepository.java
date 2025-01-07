@@ -2,19 +2,14 @@ package com.example.firstapplication.Repositories;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import com.example.firstapplication.Database.DatabaseHelper;
 import com.example.firstapplication.Models.User;
 
 public class UserRepository extends DatabaseHelper {
 
-    private final Context context;
-    private static final String PREF_NAME = "user_pref";
-
     public UserRepository(Context context) {
         super(context); // Pass the context to the parent DatabaseHelper constructor
-        this.context = context;
     }
 
     public User registerUser(String email, String password) {

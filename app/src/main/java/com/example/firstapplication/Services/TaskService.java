@@ -28,22 +28,36 @@ public class TaskService {
     }
 
     // Add a task for the logged-in user
-    public void addTask(String taskName) {
+    public boolean addTask(String taskName) {
         int userId = authService.getLoggedInUserId(); // Utility method to get the logged-in user ID
         if (userId != -1) {
-            taskRepo.addTask(taskName, userId);
+            try {
+                taskRepo.addTask(taskName, userId);
+                return true; // Task successfully added
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false; // Task addition failed
+            }
         } else {
             throw new IllegalStateException("No logged-in user found");
         }
     }
 
+
     // Delete a task for the logged-in user
-    public void deleteTask(String taskName) {
+    public boolean deleteTask(String taskName) {
         int userId = authService.getLoggedInUserId(); // Utility method to get the logged-in user ID
         if (userId != -1) {
-            taskRepo.deleteTask(taskName, userId);
+            try {
+                taskRepo.deleteTask(taskName, userId);
+                return true; // Deletion successful
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false; // Deletion failed
+            }
         } else {
             throw new IllegalStateException("No logged-in user found");
         }
     }
+
 }

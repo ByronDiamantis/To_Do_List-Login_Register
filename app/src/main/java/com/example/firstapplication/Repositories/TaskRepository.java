@@ -57,7 +57,7 @@ public class TaskRepository {
 
 
     // Delete a specific task for a specific user
-    public Task deleteTask(String taskName, int userId) {
+    public void deleteTask(String taskName, int userId) {
         // Retrieve the task before deleting it
         Cursor cursor = db.query(
                 DatabaseHelper.TABLE_TASKS,
@@ -86,7 +86,6 @@ public class TaskRepository {
                 new String[]{taskName, String.valueOf(userId)}
         );
 
-        return task; // Return the deleted task or null if not found
     }
 }
 
