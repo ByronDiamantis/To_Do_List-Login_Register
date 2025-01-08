@@ -14,7 +14,6 @@ public class TaskRepository {
     private final SQLiteDatabase db;
 
     public TaskRepository(Context context) {
-
         DatabaseHelper dbHelper = new DatabaseHelper(context); // Create a DatabaseHelper instance
         this.db = dbHelper.getWritableDatabase(); // Get the writable database
     }
@@ -30,7 +29,6 @@ public class TaskRepository {
                 new String[]{String.valueOf(userId)},
                 null, null, null
         );
-
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -55,7 +53,6 @@ public class TaskRepository {
         values.put(DatabaseHelper.COLUMN_USER_ID, userId);
         db.insert(DatabaseHelper.TABLE_TASKS, null, values);
     }
-
 
     // Delete a specific task for a specific user
     public void deleteTask(String taskName, int userId) {

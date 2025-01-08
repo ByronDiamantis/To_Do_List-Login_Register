@@ -2,7 +2,6 @@ package com.example.firstapplication.Services;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.example.firstapplication.Models.User;
 import com.example.firstapplication.Repositories.UserRepository;
 
@@ -40,7 +39,6 @@ public class AuthService {
 
             // Return instance of user
             return user;
-
         }
         return null;
     }

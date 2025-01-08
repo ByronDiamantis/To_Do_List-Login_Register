@@ -1,7 +1,6 @@
 package com.example.firstapplication.Services;
 
 import android.content.Context;
-
 import com.example.firstapplication.Models.Task;
 import com.example.firstapplication.Repositories.TaskRepository;
 import java.util.ArrayList;
@@ -47,7 +46,6 @@ public class TaskService {
         }
     }
 
-
     // Delete a task for the logged-in user
     public boolean deleteTask(String taskName) {
         int userId = authService.getLoggedInUserId(); // Utility method to get the logged-in user ID
@@ -63,5 +61,4 @@ public class TaskService {
             throw new IllegalStateException("No logged-in user found");
         }
     }
-
 }

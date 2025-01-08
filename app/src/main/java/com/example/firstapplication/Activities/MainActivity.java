@@ -1,7 +1,5 @@
 package com.example.firstapplication.Activities;
 
-
-import android.content.Context;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,7 +68,6 @@ public class MainActivity extends BaseActivity {
             String taskName = data.getStringExtra("task");
 
             if (taskName != null && !taskName.trim().isEmpty()) {
-                taskService.addTask(taskName); // Add task to the database
                 taskList.clear();
                 taskList.addAll(taskService.getTasksOfCurrentUser()); // Refresh tasks
                 taskAdapter.notifyDataSetChanged(); // Notify the adapter

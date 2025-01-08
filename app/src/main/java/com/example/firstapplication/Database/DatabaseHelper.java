@@ -24,7 +24,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TASK_ID = "task_id";
     public static final String COLUMN_TASK = "task";
 
-
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
