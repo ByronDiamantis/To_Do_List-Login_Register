@@ -22,11 +22,11 @@ This is a simple ToDoList/Login-Register android application built with Java for
 4. Start organizing your tasks with ease!
 
 ## Screenshots
-![Login](https://github.com/user-attachments/assets/c909884b-3b02-40e3-b338-0eb2ecdf1d53)
-![Register](https://github.com/user-attachments/assets/5f3d8543-8adb-4db8-bfac-438128f94b95)
-![Add_task_logout](https://github.com/user-attachments/assets/2290889f-f5f1-4a28-8b4a-88b959fafe6c)
-![Save](https://github.com/user-attachments/assets/dd3f0400-b2e8-44a7-91e9-aeab1ab6b7b1)
-![Delete](https://github.com/user-attachments/assets/3671cd7e-ae71-45e6-9337-f0ff19966b25)
+<img src="https://github.com/user-attachments/assets/c909884b-3b02-40e3-b338-0eb2ecdf1d53" alt="Login" width="300"/>
+<img src="https://github.com/user-attachments/assets/5f3d8543-8adb-4db8-bfac-438128f94b95" alt="Register" width="300"/>
+<img src="https://github.com/user-attachments/assets/2290889f-f5f1-4a28-8b4a-88b959fafe6c" alt="Add_task_logout" width="300"/>
+<img src="https://github.com/user-attachments/assets/dd3f0400-b2e8-44a7-91e9-aeab1ab6b7b1" alt="Save" width="300"/>
+<img src="https://github.com/user-attachments/assets/3671cd7e-ae71-45e6-9337-f0ff19966b25" alt="Delete" width="300"/>
 
 
 
