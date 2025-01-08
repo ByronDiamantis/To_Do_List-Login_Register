@@ -21,8 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_PASSWORD = "password";
 
     //Columns for tasks tables
+    public static final String TASK_ID = "task_id";
     public static final String COLUMN_TASK = "task";
-    private static DatabaseHelper instance;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,13 +35,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            db.execSQL(CREATE_TABLE_USERS);
-            db.execSQL(CREATE_TABLE_TASKS);
-            onCreate(db);
-        }
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        onCreate(db); // Recreate tables with the correct schema
+    }
+
 
     // SQL to create the users table table of database.
     private static final String CREATE_TABLE_USERS =
@@ -50,11 +55,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_USER_EMAIL + " TEXT UNIQUE NOT NULL, " +
                     COLUMN_USER_PASSWORD + " TEXT NOT NULL);";
 
+
     // Existing tasks table creation
     private static final String CREATE_TABLE_TASKS =
             "CREATE TABLE " + TABLE_TASKS + " (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "task TEXT NOT NULL);";
+                    TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  // Space added here
+                    COLUMN_TASK + " TEXT NOT NULL, " +
+                    COLUMN_USER_ID + " INTEGER NOT NULL, " +  // Foreign key column
+                    "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE);";
 
 }
-

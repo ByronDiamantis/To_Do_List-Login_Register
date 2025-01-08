@@ -1,20 +1,39 @@
 package com.example.firstapplication.Models;
 
 public class Task {
-    private String task;
+    private Integer id;
+    private String name;
+    private Integer userId;
 
     // Parameterized Constructor
-    public Task(String task) {
-        this.task = task;
+    public Task(Integer id, Integer userId, String name) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
     }
 
     // Getters and Setters
-
-    public String getTask() {
-        return task;
+    public String getName() {
+        return name;
     }
 
-    public void setTask(String email) {
-        this.task = task;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

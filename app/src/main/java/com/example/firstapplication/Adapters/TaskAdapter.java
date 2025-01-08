@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -13,14 +14,14 @@ import com.example.firstapplication.R;
 import com.example.firstapplication.Services.TaskService;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
-
     private final ArrayList<Task> tasks;
-    private TaskService taskService;
+    private final TaskService taskService;
+    public final int userId;
 
-    public TaskAdapter(ArrayList<Task> tasks, TaskService taskService) {
-        this.tasks = tasks;
+    public TaskAdapter(ArrayList<Task> tasks, TaskService taskService, int userId) {
+        this.tasks = tasks != null ? tasks : new ArrayList<>(); // Initialize to an empty list if null
         this.taskService = taskService;
-
+        this.userId = userId; // Initialize userId
     }
 
     // Creates a new TaskViewHolder instance to represent a single list item.
@@ -36,13 +37,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
         Task task = tasks.get(position);
-        holder.taskTextView.setText(task.getTask()); // Assuming getTask() returns the task's name
+        holder.taskTextView.setText(task.getName());
 
-        // Set delete button functionality
         holder.deleteButton.setOnClickListener(v -> {
-            taskService.deleteTask(String.valueOf(task)); // Delete from database
-            tasks.remove(position); // Remove from list
-            notifyItemRemoved(position); // Notify adapter
+            if (taskService.deleteTask(task.getName())) { // Task successfully deleted
+                tasks.remove(position); // Remove task from the list
+                notifyItemRemoved(position); // Notify adapter
+            } else {
+                Toast.makeText(holder.itemView.getContext(), "Failed to delete task", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

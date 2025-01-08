@@ -13,6 +13,21 @@ public class UserRepository extends DatabaseHelper {
     }
 
     public User registerUser(String email, String password) {
+
+        // Check if the email already exists
+        Cursor cursor = getReadableDatabase().query(
+                DatabaseHelper.TABLE_USERS,
+                new String[]{DatabaseHelper.COLUMN_USER_EMAIL},
+                DatabaseHelper.COLUMN_USER_EMAIL + " = ?",
+                new String[]{email},
+                null, null, null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.close();
+            return null; // Email already exists
+        }
+
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_USER_EMAIL, email);
         values.put(DatabaseHelper.COLUMN_USER_PASSWORD, password);
@@ -22,8 +37,7 @@ public class UserRepository extends DatabaseHelper {
 
         // Check if the insertion was successful
         if (rowId != -1) {
-            // Return a new User object with the ID, email, and password
-            return new User((int) rowId, email, password);
+            return new User((int) rowId, email, password); // Return a new User object with the ID, email, and password
         } else {
             return null; // Handle failure (optional: throw an exception or return null)
         }
@@ -54,4 +68,5 @@ public class UserRepository extends DatabaseHelper {
         }
         return null; // Return null if no user is found
     }
+
 }
